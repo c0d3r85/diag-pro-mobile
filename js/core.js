@@ -939,10 +939,7 @@ sys.menu.Controller = (function() {
   Controller.prototype.menuItemVisible = function(stateName) {
     var state;
     state = this.state.get(stateName);
-    if (state.deviceState == null) {
-      return state.showInSideMenu;
-    }
-    return state.showInSideMenu && (state.deviceState.errorCodes != null);
+    return state.showInSideMenu;
   };
 
   Controller.prototype.menuItemActive = function(stateName) {

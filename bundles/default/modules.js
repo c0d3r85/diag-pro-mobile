@@ -92,10 +92,12 @@ ru.check.please.home.Service = (function() {
       }
       return "img/scan-.jpg";
     };
-    template = '<div style="margin: auto; position: absolute; top: 0; left: 0; bottom: 0; right: 0; text-align: center; width: 261px; height: 412px;">\n  <ion-spinner></ion-spinner>\n  <img ng-show="fullScan" style="width: 261px; height: 412px;" ng-src="{{imageForDev(device)}}">\n  <div ng-show="device">{{device}}</div>\n</div>';
+    template = '<ion-modal-view style="background-color: white; left: 0; top: 0; height: 100%; width: 100%">\n<div style="margin: auto; position: absolute; top: 0; left: 0; bottom: 0; right: 0; text-align: center; width: 261px; height: 412px;">\n  <ion-spinner></ion-spinner>\n  <img ng-show="fullScan" style="width: 261px; height: 412px;" ng-src="{{imageForDev(device)}}">\n  <div ng-show="device">{{device}}</div>\n</div>\n</ion-modal-view>';
     this.waitingModal = ionicModal.fromTemplate(template, {
       hardwareBackButtonClose: false,
-      scope: this.scope
+      backdropClickToClose: false,
+      scope: this.scope,
+      animation: 'popup'
     });
   }
 
@@ -158,7 +160,7 @@ ru.check.please.home.Service = (function() {
   };
 
   Service.prototype.scanDispenser = function() {
-    return this._udateErrorCodes(this.dispenserStateName, [ru.diag.pro.error.codes.connection.noDevice]);
+    return this._udateErrorCodes(this.dispenserStateName, [ru.diag.pro.error.codes.dispenser.motorSpeedError]);
   };
 
   Service.prototype.scanPinpad = function() {
@@ -166,7 +168,7 @@ ru.check.please.home.Service = (function() {
   };
 
   Service.prototype.scanPrinter = function() {
-    return this._udateErrorCodes(this.printerStateName, [ru.diag.pro.error.codes.printer.noPaper]);
+    return this._udateErrorCodes(this.printerStateName, [ru.diag.pro.error.codes.printer.paperNearEnd]);
   };
 
   Service.prototype.scanTouchscreen = function() {
@@ -236,7 +238,7 @@ ru.diag.pro.printer.Service = (function() {
   };
 
   Service.prototype.scan = function() {
-    return this._udateErrorCodes(this.printerStateName, [ru.diag.pro.error.codes.printer.noPaper]);
+    return this._udateErrorCodes(this.printerStateName, [ru.diag.pro.error.codes.printer.paperNearEnd]);
   };
 
   Service.prototype._udateErrorCodes = function(stateName, codes) {
@@ -311,22 +313,20 @@ ru.check.please.home.Controller = (function() {
     this.isCriticalError = isCriticalError;
     this.isWarningError = isWarningError;
     this.scanned = false;
-    this.scanDevices();
   }
 
   Controller.prototype.scanDevices = function() {
+    this.scanned = false;
     return this.ionicPopup.alert({
       title: 'Сканирование',
       subTitle: 'Сейчас будет произведена диагностика узлов банкомата'
     }).then((function(_this) {
       return function() {
-        return _this.homeService.waitForFullScan();
-      };
-    })(this)).then((function(_this) {
-      return function(state) {
-        _this.devicesState = state;
-        _this.bankomatModel = 'NCR Personas 5887';
-        return _this.scanned = true;
+        return _this.homeService.waitForFullScan().then(function(state) {
+          _this.devicesState = state;
+          _this.bankomatModel = 'NCR Personas 5887';
+          return _this.scanned = true;
+        });
       };
     })(this));
   };
@@ -418,6 +418,26 @@ ru.check.please.home.Controller = (function() {
       }
       return results;
     }).call(this)) || [];
+  };
+
+  Controller.prototype.errorsShortDesc = function(errorCodes) {
+    var ref;
+    if (!((errorCodes != null ? errorCodes.length : void 0) > 0)) {
+      return;
+    }
+    if (ref = ru.diag.pro.error.codes.dispenser.motorSpeedError, indexOf.call(errorCodes, ref) >= 0) {
+      return 'ошибка скорости главного мотора диспенсера';
+    }
+  };
+
+  Controller.prototype.warningsShortDesc = function(errorCodes) {
+    var ref;
+    if (!((errorCodes != null ? errorCodes.length : void 0) > 0)) {
+      return;
+    }
+    if (ref = ru.diag.pro.error.codes.printer.paperNearEnd, indexOf.call(errorCodes, ref) >= 0) {
+      return 'бумага скоро закончится';
+    }
   };
 
   return Controller;
@@ -805,7 +825,7 @@ angular.module(['ru.diag.pro.dispenser', '1.0.0'], ['ionic', 'sys.menu', 'sys.bu
   }
 ]).controller('ru.diag.pro.dispenser.Controller', ru.diag.pro.dispenser.Controller);
 
-var k, v,
+var k, ref, v,
   indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
 namespace('ru.diag.pro.error.codes');
@@ -825,18 +845,27 @@ ru.diag.pro.error.codes.connectionErrorCodes = (function() {
   return results;
 })();
 
-ru.diag.pro.error.codes.printer = {
-  noPaper: 20
+ru.diag.pro.error.codes.dispenser = {
+  motorSpeedError: 40
 };
+
+ru.diag.pro.error.codes.printer = {
+  noPaper: 20,
+  paperNearEnd: 30
+};
+
+ru.diag.pro.error.codes.warningErrorCodes = [ru.diag.pro.error.codes.printer.paperNearEnd];
+
+(ref = ru.diag.pro.error.codes.warningErrorCodes).push.apply(ref, ru.diag.pro.error.codes.connectionErrorCodes);
 
 angular.module(['ru.diag.pro.error.codes', '1.0.0'], []).constant('ru.diag.pro.error.codes.connection', ru.diag.pro.error.codes.connection).constant('ru.diag.pro.error.codes.printer', ru.diag.pro.error.codes.printer).constant('ru.diag.pro.error.codes.device.isCriticalError', function(errorCode) {
   if (errorCode == null) {
     return false;
   }
-  return indexOf.call(ru.diag.pro.error.codes.connectionErrorCodes, errorCode) < 0;
+  return indexOf.call(ru.diag.pro.error.codes.warningErrorCodes, errorCode) < 0;
 }).constant('ru.diag.pro.error.codes.device.isWarningError', function(errorCode) {
   if (errorCode == null) {
     return false;
   }
-  return indexOf.call(ru.diag.pro.error.codes.connectionErrorCodes, errorCode) >= 0;
+  return indexOf.call(ru.diag.pro.error.codes.warningErrorCodes, errorCode) >= 0;
 });

@@ -1,10 +1,29 @@
+
+<<!-- div style="margin: auto; position: absolute; top: 0; left: 0; bottom: 0; right: 0; text-align: center; width: 261px; height: 412px;">
+      <img style="width: 261px; height: 412px;" ng-src="{{imageForDev(device)}}">
+    </div> -->
+
+<style type="text/css">
+  .home-img {
+    background: url(img/scan-.jpg) center no-repeat;
+    /*top: 60px;
+    right: 10px;
+    width: 450px;*/
+
+
+    /*display: inline-block;*/
+    /*position: absolute;*/
+    /*width: 100%;
+    height: 100%;*/
+    /*position: relative;*/
+    /*float:right;*/
+    /*background-image: url(img/start-bg.jpg);*/
+  }
+</style>
+
 <ion-view view-title="Информация о {{controller.bankomatModel}}">
-  <ion-nav-buttons side="right">
-    <button class="button" ng-click="controller.scanDevices()">
-      1 Диагностика
-    </button>
-  </ion-nav-buttons>
-	<ion-content>
+	<ion-content class="has-footer"
+  ng-class="{ 'home-img': !controller.scanned, '':controller.scanned }">
 		<ion-list>
       <div ng-show="controller.scanned">
         <div class="list" ng-if="controller.statesWithCriticalErrors().length > 0">
@@ -14,6 +33,7 @@
           </div>
           <div class="item item-icon-right" ng-repeat="state in controller.statesWithCriticalErrors()" ui-sref="{{state.name}}">
           {{::state.deviceState.name}}
+          <p>{{::controller.errorsShortDesc(state.deviceState.errorCodes)}}</p>
           <!-- <span class="badge badge-assertive">{{::controller.criticalErrorsCount(state)}}</span> -->
           <i class="icon ion-ios-arrow-forward"></i>
           </div>
@@ -26,6 +46,7 @@
           </div>
           <div class="item item-icon-right" ng-repeat="state in controller.statesWithWarningErrors()" ui-sref="{{state.name}}">
           {{::state.deviceState.name}}
+          <p>{{::controller.warningsShortDesc(state.deviceState.errorCodes)}}</p>
           <!-- <span class="badge badge-energized">{{::controller.warningErrorsCount(state)}}</span> -->
           <i class="icon ion-ios-arrow-forward"></i>
           </div>
@@ -40,6 +61,15 @@
           {{::state.deviceState.name}}
           </div>
         </div>
+      </div>
     </ion-list>
 	</ion-content>
+  <div class="bar bar-footer bar-clear">
+        <!-- <div class="title">Помощник решения проблем</div> -->
+        <!-- <div class="button-bar"> -->
+        <button class="button button-block button-balanced" ng-click="controller.scanDevices()">
+          1 Запустить полную диагностику
+        </button>
+        <!-- </div> -->
+      </div>
 </ion-view>
