@@ -1,0 +1,34 @@
+<ion-view view-title="Формирование заказа">
+	<ion-content>
+		<div ng-repeat="orederedItem in controller.orderList()">
+			<!-- <a ng-href="{{controller.openMenu(menu)}}">{{::menu.name}}</a> -->
+			<!-- <button class="button button-block button-positive" ui-sref="{{::controller.openMenu(menu)}}">{{::menu.name}}</button> -->
+
+			<div class="item item-thumbnail-left" href="#">
+				<img ng-src="{{::controller.itemPhoto(orederedItem)}}">
+				<h2>{{::orederedItem.item.name}}</h2>
+				<div style="display:table;"><span style="display:table-cell;vertical-align:middle;">Количество:</span>
+				<button class="button button-clear icon ion-plus-circled" ng-click="controller.appendItem(orederedItem)">
+				</button>
+				<span style="display:table-cell;vertical-align:middle;">{{orederedItem.count}}</span>
+				<button ng-if="orederedItem.count > 0" class="button button-clear icon ion-minus-circled" ng-click="controller.removeItem(orederedItem)">
+				</button>
+				</div>
+
+
+				<p>Сумма: {{(orederedItem.count * controller.itemPrice(orederedItem))}}</p>
+			</div>
+		</div>
+		<div ng-if="controller.orderList().length > 0">
+			<div>
+				Итого: {{controller.orderSum()}}
+			</div>
+			<button class="button button-block button-positive" ng-click="controller.sendOrder()">
+				Подтвердить заказ
+			</button>
+			<button ng-if="controller.isCancelEnabled()" class="button button-block button-assertive" ng-click="controller.cancelOrder()">
+				Отменить заказ
+			</button>
+		</div>
+	</ion-content>
+</ion-view>

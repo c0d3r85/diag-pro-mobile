@@ -1,0 +1,168 @@
+<style type="text/css">
+	.cardreader-img {
+		top: 20px;
+		right: 10px;
+		width: 500px;
+
+
+		/*display: inline-block;*/
+		position: absolute;
+		/*width: 100%;
+		height: 100%;*/
+		/*position: relative;*/
+		/*float:right;*/
+		/*background-image: url(img/start-bg.jpg);*/
+	}
+	.left-cardreader-text {
+		/*right: 520px;
+		left: 0px;*/
+		width: 250px;
+		top: 25px;
+		font-size: 8pt;
+		/*z-index: 8;*/
+
+		/*position: relative;*/
+		/*float:left;*/
+		position: absolute;
+		/*display: inline-block;*/
+	}
+	.bottom-cardreader-text {
+		/*bottom: 10px;*/
+		top: 332px;
+		left: 250px;
+		right: 0px;
+		font-size: 8pt;
+		/*width: 100%;*/
+		position: absolute;
+	}
+</style>
+
+<ion-view view-title="Кардридер">
+<ion-nav-buttons side="left">
+      <button class="button" ng-click="doSomething()">
+        0 В меню
+      </button>
+    </ion-nav-buttons>
+	<ion-pane style="background: url(img/cardreader.jpg) right top no-repeat">
+		<!-- <ion-tabs class="tabs-stable tabs-top tabs-icon-top">
+
+			<ion-tab title="1 Состояние" icon-on="ion-ios-information" icon-off="ion-ios-information-outline"> -->
+			<div>
+				<div class="left-cardreader-text">
+					<div class="list card">
+						<div class="item item-divider">Ошибки</div>
+						<div>
+						Карта застряла: Нет
+						</div>
+						<div>
+						Карта длинная: Нет
+						</div>
+						<div>
+						Карта короткая: Нет
+						</div>
+						<div>
+						Выполнение команды невозможно: Нет
+						</div>
+						<div>
+						Команда не опознана: Нет
+						</div>
+						<div>
+						Ошибка шаттера: Нет
+						</div>
+						<div>
+						Карта в шаттере: Нет
+						</div>
+						<div>
+						Ошибка данных команды: Нет
+						</div>
+						<div>
+						Не принят ключ расшифровки: Нет
+						</div>
+						<div>
+						Ошибка памяти CRC: Нет
+						</div>
+						<div>
+						Карта застряла при выдаче: Нет
+						</div>
+						<div>
+						Некорректный параметр: Нет
+						</div>
+						<div>
+						Функция невыполнима: Нет
+						</div>
+					</div>
+
+					<div class="list card">
+						<div class="item item-divider">Состояние датчиков</div>
+						<div>
+						Карта внутри: Нет
+						</div>
+						<div>
+						Карта в створе: Нет
+						</div>
+						<div>
+						PD1 закрыт: Нет
+						</div>
+						<div>
+						PD2 закрыт: Нет
+						</div>
+						<div>
+						PD3 закрыт: Нет
+						</div>
+						<div>
+						PD4 закрыт: Нет
+						</div>
+						<div>
+						Шаттер закрыт: Нет
+						</div>
+						<div>
+						IC головка опущена: Нет
+						</div>
+					</div>
+				</div>
+				<!-- <img class="cardreader-img" src="img/cardreader.jpg"> -->
+			</div>
+			<div class="bottom-cardreader-text padding">
+				<div class="list card">
+					<div class="item item-divider">Магнитные дорожки</div>
+					<div>#1 'Информация с дорожки №1'</div>
+					<div>#2 'Информация с дорожки №2'</div>
+					<div>#3 'Информация с дорожки №3'</div>
+				</div>
+				<div class="list card">
+					<div class="item item-divider">Чип</div>
+					<div>'Информация с чипа карты'</div>
+				</div>
+			</div>
+
+			<div class="bar bar-footer bar-clear">
+				<!-- <div class="title">Помощник решения проблем</div> -->
+				<div class="button-bar">
+				<button class="button button-balanced" ng-click="controller.scan()">
+					1 Опросить
+				</button>
+				<button class="button button-balanced" ui-sref="menu.cardreader-management">
+					2 Управление
+				</button>
+				<button class="button button-balanced" ng-click="controller.openKnowlege()">
+					3 База знаний
+				</button>
+				<button class="button button-balanced" ng-click="controller.openHelper()">
+					4 Помощник
+				</button>
+				</div>
+			</div>
+
+			
+		<!-- </ion-tab>
+
+		<ion-tab title="2 Управление" icon-on="ion-ios-gear" icon-off="ion-ios-gear-outline">
+
+		</ion-tab>
+
+		<ion-tab title="3 База знаний" icon-on="ion-ios-book" icon-off="ion-ios-book-outline">
+		</ion-tab>
+
+	</ion-tabs> -->
+	</ion-pane>
+</ion-view>

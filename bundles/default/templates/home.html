@@ -1,0 +1,45 @@
+<ion-view view-title="Информация о {{controller.bankomatModel}}">
+  <ion-nav-buttons side="right">
+    <button class="button" ng-click="controller.scanDevices()">
+      1 Диагностика
+    </button>
+  </ion-nav-buttons>
+	<ion-content>
+		<ion-list>
+      <div ng-show="controller.scanned">
+        <div class="list" ng-if="controller.statesWithCriticalErrors().length > 0">
+          <div class="item item-divider item-icon-left">
+          <i class="icon ion-close-circled assertive"></i>
+          Ошибки
+          </div>
+          <div class="item item-icon-right" ng-repeat="state in controller.statesWithCriticalErrors()" ui-sref="{{state.name}}">
+          {{::state.deviceState.name}}
+          <!-- <span class="badge badge-assertive">{{::controller.criticalErrorsCount(state)}}</span> -->
+          <i class="icon ion-ios-arrow-forward"></i>
+          </div>
+        </div>
+
+        <div class="list" ng-if="controller.statesWithWarningErrors().length > 0">
+          <div class="item item-divider item-icon-left">
+          <i class="icon ion-alert-circled energized"></i>
+          Предупреждения
+          </div>
+          <div class="item item-icon-right" ng-repeat="state in controller.statesWithWarningErrors()" ui-sref="{{state.name}}">
+          {{::state.deviceState.name}}
+          <!-- <span class="badge badge-energized">{{::controller.warningErrorsCount(state)}}</span> -->
+          <i class="icon ion-ios-arrow-forward"></i>
+          </div>
+        </div>
+
+        <div class="list" ng-if="controller.statesWithoutErrors().length > 0">
+          <div class="item item-divider item-icon-left">
+          <i class="icon ion-checkmark-circled positive"></i>
+          Нет ошибок
+          </div>
+          <div class="item" ng-repeat="state in controller.statesWithoutErrors()">
+          {{::state.deviceState.name}}
+          </div>
+        </div>
+    </ion-list>
+	</ion-content>
+</ion-view>

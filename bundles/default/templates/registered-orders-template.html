@@ -1,0 +1,30 @@
+<ion-view view-title="Сформированные заказы">
+	<ion-content>
+		<ion-refresher
+			pulling-text="Обновить..."
+			on-refresh="controller.refreshOrders()">
+		</ion-refresher>
+		<div>
+			<div class="item item-body card" ng-repeat="item in controller.registeredOrders" ui-sref="{{::controller.showOrder(item)}}">
+				<div>
+					ID: {{::item.id}}
+				</div>
+				<div>
+					Place: {{::item.place.name}}
+				</div>
+				<div>
+					Status: {{::item.order_status.name}}
+				</div>
+				<div>
+					Created: {{::controller.dateToString(item.created)}}
+				</div>
+				<div>
+					Updated: {{::controller.dateToString(item.updated)}}
+				</div>
+				<div>
+					Order sum: {{::controller.registeredOrderSum(item)}} руб.
+				</div>
+			</div>
+		</div>
+	</ion-content>
+</ion-view>

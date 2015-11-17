@@ -1,0 +1,121 @@
+<style type="text/css">
+	.printer-img {
+		top: 60px;
+		right: 10px;
+		width: 450px;
+
+
+		/*display: inline-block;*/
+		position: absolute;
+		/*width: 100%;
+		height: 100%;*/
+		/*position: relative;*/
+		/*float:right;*/
+		/*background-image: url(img/start-bg.jpg);*/
+	}
+	.left-printer-text {
+		right: 460px;
+		left: 0px;
+		top: 30px;
+		font-size: 8pt;
+
+		/*position: relative;*/
+		/*float:left;*/
+		position: absolute;
+		/*display: inline-block;*/
+	}
+	.bottom-printer-text {
+		/*bottom: 10px;*/
+		top: 390px;
+		width: 100%;
+		position: absolute;
+	}
+</style>
+
+<ion-view view-title="Принтер">
+<ion-nav-buttons side="left">
+      <button class="button" ng-click="doSomething()">
+        0 В меню
+      </button>
+    </ion-nav-buttons>
+	<ion-pane>
+		<!-- <ion-tabs class="tabs-stable tabs-top tabs-icon-top">
+
+			<ion-tab title="1 Состояние" icon-on="ion-ios-information" icon-off="ion-ios-information-outline"> -->
+			<div>
+				<div class="left-printer-text">
+					<div class="list card">
+					<div class="item item-divider">Состояние датчиков</div>
+						<div style="font-size: 8pt;">
+						Бумага подана в принтер: Да
+						</div>
+						<div style="font-size: 8pt;">
+						Бумага замята в принтере: Нет
+						</div>
+						<div style="font-size: 8pt;">
+						Мало бумаги: Нет
+						</div>
+						<div style="font-size: 8pt;">
+						Принтер открыт: Да
+						</div>
+						<div style="font-size: 8pt;">
+						Принтер в ошибке: Нет
+						</div>
+						<div style="font-size: 8pt;">
+						Ошибки прошивки: Нет
+						</div>
+						<div style="font-size: 8pt;">
+						Головка печати накалена: Нет
+						</div>
+						<div style="font-size: 8pt;">
+						Ошибки памяти: Нет
+						</div>
+						<div style="font-size: 8pt;">
+						Ошибки порта: Нет
+						</div>
+						<div style="font-size: 8pt;">
+						Ошибки питания: Нет
+						</div>
+						<div style="font-size: 8pt;">
+						Мотор выдачи чека включен: Нет
+						</div>
+						<div style="font-size: 8pt;">
+						Замятие бумаги на выходе: Нет
+						</div>
+					</div>
+				</div>
+				<img class="printer-img" src="img/printer.jpg">
+			</div>
+			<!-- <div class="bottom-printer-text padding" ng-click="controller.scan()">Некоторое количество текста. Некоторое количество текста. Некоторое количество текста. Некоторое количество текста. Некоторое количество текста. Некоторое количество текста. Некоторое количество текста. Некоторое количество текста. Некоторое количество текста. Некоторое количество текста. Некоторое количество текста. Некоторое количество текста. Некоторое количество текста. Некоторое количество текста. Некоторое количество текста. Некоторое количество текста. Некоторое количество текста. Некоторое количество текста. Некоторое количество текста. Некоторое количество текста. Некоторое количество текста. Некоторое количество текста. Некоторое количество текста. Некоторое количество текста. Некоторое количество текста. Некоторое количество текста. Некоторое количество текста. </div> -->
+
+			<div class="bar bar-footer bar-clear">
+				<!-- <div class="title">Помощник решения проблем</div> -->
+				<div class="button-bar">
+				<button class="button button-balanced" ng-click="controller.scan()">
+					1 Опросить
+				</button>
+				<button class="button button-balanced">
+					2 Тестовая печать
+				</button>
+				<button class="button button-balanced" ng-click="controller.openKnowlege()">
+					3 База знаний
+				</button>
+				<button class="button button-balanced" ng-click="controller.openHelper()">
+					4 Помощник
+				</button>
+				</div>
+			</div>
+
+			
+		<!-- </ion-tab>
+
+		<ion-tab title="2 Управление" icon-on="ion-ios-gear" icon-off="ion-ios-gear-outline">
+
+		</ion-tab>
+
+		<ion-tab title="3 База знаний" icon-on="ion-ios-book" icon-off="ion-ios-book-outline">
+		</ion-tab>
+
+	</ion-tabs> -->
+	</ion-pane>
+</ion-view>

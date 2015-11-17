@@ -1,0 +1,59 @@
+<style type="text/css">
+  .item-menu {
+    padding: 0;
+    height: 180px;
+    overflow: hidden;
+  }
+
+  .category-item {
+    height: 120px;
+  }
+
+  .category-list {
+  	margin-top: 16px;
+  }
+
+  .menu-title {
+    position: absolute;
+    background-color: rgba(239, 71, 58,.6);
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 15px 20px;
+  }
+  .menu-title h4 {
+    font-size: 12px;
+    color: #fff;
+  }
+  .category-item .menu-title {
+    padding: 8px 20px;
+  }
+</style>
+
+
+<ion-view view-title={{controller.menuTitle()}}>
+	<ion-nav-buttons side="right">
+		<button class="button" ui-sref="menu.order">
+			Заказ
+		</button>
+	</ion-nav-buttons>
+	<div class="tabs-striped tabs-top tabs-color-assertive">
+		<div class="tabs">
+			<a class="tab-item" ng-repeat="menu in controller.allMenus" ng-click="controller.changeMenu(menu)" ng-class="{active: menu == controller.menu}">
+				{{::menu.name}}
+			</a>	
+		</div>
+	</div>
+	<ion-content class="has-tabs-top category-list">
+		<div class="row" ng-repeat="row in controller.categoryRows">
+			<div class="col col50 item item-menu category-item" ng-repeat="category in row" ui-sref="{{::controller.openCategory(category)}}">
+				<div class="item-image">
+    				<img ng-src="{{::category.mainphoto}}">
+    			</div>
+	            <div class="menu-title">
+	              	<h4>{{::category.name}}</h4>
+	            </div>
+			</div>
+		</div>
+	</ion-content>
+</ion-view>
