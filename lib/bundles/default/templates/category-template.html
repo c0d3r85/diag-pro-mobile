@@ -1,0 +1,70 @@
+<style type="text/css">
+.item-order-right {
+    bottom: 10px;
+    right: 16px;
+    min-width: 28px;
+    min-height: 30px;
+    font-size: 14px;
+    line-height: 26px;
+    position: absolute;
+  }
+  .item-info-right {
+    top: 16px;
+    right: 16px;
+    padding: 0 4px;
+    min-width: 28px;
+    min-height: 30px;
+    font-size: 18px;
+    line-height: 26px;
+    position: absolute;
+  }
+
+  .items-list  img {
+    border-radius: 10px;
+  }
+
+  .items-list .button-small {
+    padding: 0 4px;
+    font-size: 14px;
+  }
+
+  .items-list h2 {
+    margin-bottom: 10px;
+    margin-top: 4px;
+  }
+
+  .item-button-right, a.item.item-button-right, button.item.item-button-right {
+      padding-right: 90px;
+  }
+</style>
+
+<ion-view view-title={{controller.categoryTitle()}}>
+	<ion-nav-buttons side="right">
+      <button class="button" ui-sref="menu.order">
+        Заказ
+      </button>
+    </ion-nav-buttons>
+
+    <div class="tabs-striped tabs-top tabs-color-assertive">
+		<div class="tabs">
+			<a ng-repeat="category in controller.categories" class="tab-item" ng-click="controller.changeCategory(category)" ng-class="{active: category == controller.category}">
+				{{::category.name}}
+			</a>	
+		</div>
+	</div>
+
+	<ion-content class="has-tabs-top items-list">
+		<div class="item item-thumbnail-left item-button-right" ng-repeat="item in controller.items()">
+            <img ng-src="{{::item.mainphoto}}">
+            <h2>{{::item.name}}</h2>
+            <p>Вес: 1230г<br>
+            {{::item.description}}</p>
+            <div class="item-info-right assertive">{{::controller.itemPrice(item)}}р.</div>
+            <div class="item-order-right">
+              <button class="button button-small button-assertive" ng-click="controller.appendItem(item)">
+                Заказать
+              </button>
+            </div>
+        </div>
+	</ion-content>
+</ion-view>

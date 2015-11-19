@@ -1,0 +1,48 @@
+<ion-view view-title="Просмотр заказа">
+	<ion-content>
+	<ion-refresher
+		pulling-text="Обновить..."
+		on-refresh="controller.refreshOrders()">
+	</ion-refresher>
+	<div>
+			<div>
+				<div>
+					ID: {{::controller.order.id}}
+				</div>
+				<div>
+					Place: {{::item.place.name}}
+				</div>
+				<div>
+					Status: {{controller.order.order_status.name}}
+				</div>
+				<div>
+					Created: {{controller.dateToString(controller.order.created)}}
+				</div>
+				<div>
+					Updated: {{controller.dateToString(controller.order.updated)}}
+				</div>
+			</div>
+		</div>
+
+		<div ng-repeat="orederedItem in controller.items()">
+			<!-- <a ng-href="{{controller.openMenu(menu)}}">{{::menu.name}}</a> -->
+			<!-- <button class="button button-block button-positive" ui-sref="{{::controller.openMenu(menu)}}">{{::menu.name}}</button> -->
+
+			<div class="item item-thumbnail-left" href="#">
+				<img ng-src="{{::controller.itemPhoto(orederedItem)}}">
+				<h2>{{::orederedItem.name}}</h2>
+				<div style="display:table;"><span style="display:table-cell;vertical-align:middle;">Количество:</span>
+				<span style="display:table-cell;vertical-align:middle;">{{orederedItem.amount}}</span>
+				</div>
+
+
+				<p>Сумма: {{(orederedItem.amount * orederedItem.price) / 100.0}}</p>
+			</div>
+		</div>
+		<div ng-if="controller.items().length > 0">
+			<div>
+				Итого: {{controller.orderSum()}}
+			</div>
+		</div>
+	</ion-content>
+</ion-view>

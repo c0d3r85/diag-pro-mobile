@@ -1,0 +1,48 @@
+<style type="text/css">
+  .item-menu {
+    padding: 0;
+    height: 180px;
+    overflow: hidden;
+  }
+  .menu-title {
+    position: absolute;
+    background-color: rgba(239, 71, 58,.6);
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 15px 20px;
+    font-size: 22px;
+  }
+  .menu-title h2 {
+    font-size: 22px;
+    color: #fff;
+  }
+</style>
+
+<ion-view view-title={{controller.restaurantTitle()}}>
+	<ion-nav-buttons side="right">
+      <button class="button" ui-sref="menu.order">
+        Заказ
+      </button>
+    </ion-nav-buttons>
+	<ion-content>
+		<div>
+		<div class="item">
+            <h1>{{controller.restaurantTitle()}}</h1>
+            <div class="row">
+            <button class="col col50 button button-outline button-assertive" ng-click="controller.callWaiter()">Вызывать официанта</button>
+            <button class="col col50 button button-outline button-assertive" ng-click="controller.askForInvoice()">Запросить счет</button>
+            </div>
+        </div>
+        </div>
+
+		<div class="item item-menu" ng-repeat="menu in controller.menus()" ui-sref="{{::controller.openMenu(menu)}}">
+			<div class="item-image">
+            <img ng-src="{{menu.mainphoto}}">
+            </div>
+            <div class="menu-title">
+              <h2>{{menu.name}}</h2>
+            </div>
+		</div>
+	</ion-content>
+</ion-view>

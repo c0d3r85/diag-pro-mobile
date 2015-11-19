@@ -1,0 +1,62 @@
+<ion-view view-title="Управление диспенсером">
+<div class="tabs tabs-balanced">
+  <a class="tab-item" ng-class="{ 'active': controller.managementPage == 1 }" ng-click="controller.managementPage = 1">
+    <span ng-hide="controller.managementPage == 1">9 </span>Страница 1
+  </a>
+  <a class="tab-item" ng-class="{ active: controller.managementPage == 2}" ng-click="controller.managementPage = 2">
+    <span ng-hide="controller.managementPage == 2">9 </span>Страница 2
+  </a>
+</div>
+	<ion-content class="has-tabs has-header">
+		<div ng-show="controller.managementPage == 1" class="list">
+			<div class="button button-block">
+			1 Clear - сброс состояния диспенсера
+			</div>
+			<div class="button button-block">
+			2 Set Notes - задать количество купюр для проведения тестирования
+			</div>
+			<div class="button button-block">
+			3 Stack - набрать указанное количество купюр и оставить их в презентере
+			</div>
+			<div class="button button-block">
+			4 Present - выдать набранные купюры
+			</div>
+			<div class="button button-block">
+			5 Dispense - набор и выдача купюр одной командой
+			</div>
+			<div class="button button-block">
+			6 Main Motor - тестирование главного мотора
+			</div>
+			<div class="button button-block">
+			7 Self Test - набрать по одной купюре с каждой кассеты и сбросить в реджект
+			</div>
+			<div class="button button-block">
+			8 Exit Shutter - тестирование шторки
+			</div>
+		</div>
+
+		<div ng-show="controller.managementPage == 2" class="list">
+			<div class="button button-block">
+			1 Enter Card Test - проверка состояния датчиков диспенсера
+			</div>
+			<div class="button button-block">
+			2 Read ISO Track 2 Test - проверка скорости движения главного мотора презентера
+			</div>
+			<div class="button button-block">
+			3 Smart Card Reset Test - обучение параметрам купюр
+			</div>
+			<div class="button button-block">
+			4 Capture Card - проверка клампа
+			</div>
+			<div class="button button-block">
+			5 Shutter Sensor Test - проверка соленоидов пик-модулей
+			</div>
+			<div class="button button-block">
+			6 Cleaning Cycle Test - проверка связи с компьютером
+			</div>
+			<div class="button button-block">
+			7 Relay and Battery Test - объединенное тестирование
+			</div>
+		</div>
+	</ion-content>
+</ion-view>
