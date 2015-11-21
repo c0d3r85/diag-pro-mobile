@@ -1,4 +1,77 @@
+<style type="text/css">
+	.pinpad-img {
+		top: 20px;
+		right: 10px;
+		width: 256px;
+
+
+		/*display: inline-block;*/
+		position: absolute;
+		/*width: 100%;
+		height: 100%;*/
+		/*position: relative;*/
+		/*float:right;*/
+		/*background-image: url(img/start-bg.jpg);*/
+	}
+	.left-pinpad-text {
+		/*right: 520px;
+		left: 0px;*/
+		width: 250px;
+		top: 25px;
+		/*font-size: 8pt;*/
+		/*z-index: 8;*/
+
+		/*position: relative;*/
+		/*float:left;*/
+		position: absolute;
+		/*display: inline-block;*/
+	}
+	.bottom-pinpad-text {
+		/*bottom: 10px;*/
+		top: 332px;
+		left: 250px;
+		right: 0px;
+		font-size: 8pt;
+		/*width: 100%;*/
+		position: absolute;
+	}
+</style>
+
 <ion-view view-title="Пинпад">
-	<ion-content>
+<ion-nav-buttons side="left">
+      <button class="button" ng-click="doSomething()">
+        0 В меню
+      </button>
+    </ion-nav-buttons>
+	<ion-content class="has-header">
+	<div class="list card">
+	    <div class="item">Список нажатых клавиш пуст</div>
+	    <div class="item">Список нажатых боковых клавиш пуст</div>
+	    <div class="item item-body" href="#" style="margin: 0 auto; width: 550px;">
+	    	<img src="img/pinpad.jpg">
+	      
+	    </div>
+	    <button class="button button-block button-balanced" ui-sref="menu.pinpad-management">
+			2 BAPE Enccryptor Test - тестирование модуля шифрования
+		</button>
+	</div>
+
 	</ion-content>
+
+	<div class="bar bar-footer bar-clear">		
+		<div class="button-bar">
+		<button class="button button-balanced" ng-click="controller.scan()">
+			1 Опросить
+		</button>
+		<!-- <button class="button button-balanced" ui-sref="menu.pinpad-management">
+			2 Управление
+		</button> -->
+		<button class="button button-balanced" ng-click="controller.openKnowlege()">
+			3 База знаний
+		</button>
+		<button class="button button-balanced" ng-click="controller.openHelper()">
+			4 Помощник
+		</button>
+		</div>
+	</div>
 </ion-view>

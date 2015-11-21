@@ -265,9 +265,29 @@ ru.diag.pro.printer.Service = (function() {
 namespace('ru.diag.pro.pinpad');
 
 ru.diag.pro.pinpad.Service = (function() {
-  Service.$inject = [];
+  Service.$inject = ['$state', '$timeout', 'ru.diag.pro.pinpad.stateName'];
 
-  function Service() {}
+  function Service(state, timeout, stateName1) {
+    this.timeout = timeout;
+    this.stateName = stateName1;
+    this.deviceState = state.get(this.stateName).deviceState;
+  }
+
+  Service.prototype.deviceName = function() {
+    return this.deviceState.name;
+  };
+
+  Service.prototype.scan = function() {
+    return this._udateErrorCodes(this.stateName, []);
+  };
+
+  Service.prototype._udateErrorCodes = function(stateName, codes) {
+    return this.timeout(100).then((function(_this) {
+      return function() {
+        return _this.deviceState.errorCodes = codes;
+      };
+    })(this));
+  };
 
   return Service;
 
@@ -287,9 +307,29 @@ ru.diag.pro.touchscreen.Service = (function() {
 namespace('ru.diag.pro.dispenser');
 
 ru.diag.pro.dispenser.Service = (function() {
-  Service.$inject = [];
+  Service.$inject = ['$state', '$timeout', 'ru.diag.pro.dispenser.stateName'];
 
-  function Service() {}
+  function Service(state, timeout, stateName1) {
+    this.timeout = timeout;
+    this.stateName = stateName1;
+    this.deviceState = state.get(this.stateName).deviceState;
+  }
+
+  Service.prototype.deviceName = function() {
+    return this.deviceState.name;
+  };
+
+  Service.prototype.scan = function() {
+    return this._udateErrorCodes(this.stateName, [ru.diag.pro.error.codes.dispenser.motorSpeedError]);
+  };
+
+  Service.prototype._udateErrorCodes = function(stateName, codes) {
+    return this.timeout(100).then((function(_this) {
+      return function() {
+        return _this.deviceState.errorCodes = codes;
+      };
+    })(this));
+  };
 
   return Service;
 
@@ -298,9 +338,29 @@ ru.diag.pro.dispenser.Service = (function() {
 namespace('ru.diag.pro.bna');
 
 ru.diag.pro.bna.Service = (function() {
-  Service.$inject = [];
+  Service.$inject = ['$state', '$timeout', 'ru.diag.pro.bna.stateName'];
 
-  function Service() {}
+  function Service(state, timeout, stateName1) {
+    this.timeout = timeout;
+    this.stateName = stateName1;
+    this.deviceState = state.get(this.stateName).deviceState;
+  }
+
+  Service.prototype.deviceName = function() {
+    return this.deviceState.name;
+  };
+
+  Service.prototype.scan = function() {
+    return this._udateErrorCodes(this.stateName, []);
+  };
+
+  Service.prototype._udateErrorCodes = function(stateName, codes) {
+    return this.timeout(100).then((function(_this) {
+      return function() {
+        return _this.deviceState.errorCodes = codes;
+      };
+    })(this));
+  };
 
   return Service;
 
@@ -624,9 +684,74 @@ ru.diag.pro.printer.Controller = (function() {
 namespace('ru.diag.pro.pinpad');
 
 ru.diag.pro.pinpad.Controller = (function() {
-  Controller.$inject = [];
+  Controller.$inject = ['$scope', 'ru.check.please.home.Service', 'ru.diag.pro.pinpad.Service', '$ionicModal', '$ionicScrollDelegate'];
 
-  function Controller() {}
+  function Controller(scope, homeService, service, ionicModal, scrollDelegate) {
+    this.homeService = homeService;
+    this.service = service;
+    this.managementPage = 1;
+    scope.closeHelper = (function(_this) {
+      return function() {
+        return _this.helperModal.hide();
+      };
+    })(this);
+    scope.closeKnowlege = (function(_this) {
+      return function() {
+        return _this.knowlegeModal.hide();
+      };
+    })(this);
+    scope.scrollUp = (function(_this) {
+      return function(delegate) {
+        return scrollDelegate.$getByHandle(delegate).scrollBy(0, -40);
+      };
+    })(this);
+    scope.scrollDown = (function(_this) {
+      return function(delegate) {
+        return scrollDelegate.$getByHandle(delegate).scrollBy(0, 40);
+      };
+    })(this);
+    ionicModal.fromTemplateUrl('templates/pinpad-helper-template.html', {
+      scope: scope
+    }).then((function(_this) {
+      return function(ctrlr) {
+        return _this.helperModal = ctrlr;
+      };
+    })(this));
+    scope.$on('$destroy', (function(_this) {
+      return function() {
+        var ref, ref1;
+        if ((ref = _this.helperModal) != null) {
+          ref.remove();
+        }
+        return (ref1 = _this.knowlegeModal) != null ? ref1.remove() : void 0;
+      };
+    })(this));
+    ionicModal.fromTemplateUrl('templates/pinpad-helper-knowlege-template.html', {
+      scope: scope
+    }).then((function(_this) {
+      return function(ctrlr) {
+        return _this.knowlegeModal = ctrlr;
+      };
+    })(this));
+  }
+
+  Controller.prototype.scan = function() {
+    return this.homeService.showWaitingModal(this.service.deviceName()).then((function(_this) {
+      return function() {
+        return _this.service.scan()["finally"](function() {
+          return _this.homeService.hideWaitingModal();
+        });
+      };
+    })(this));
+  };
+
+  Controller.prototype.openHelper = function() {
+    return this.helperModal.show();
+  };
+
+  Controller.prototype.openKnowlege = function() {
+    return this.knowlegeModal.show();
+  };
 
   return Controller;
 
@@ -722,9 +847,74 @@ ru.diag.pro.dispenser.Controller = (function() {
 namespace('ru.diag.pro.bna');
 
 ru.diag.pro.bna.Controller = (function() {
-  Controller.$inject = [];
+  Controller.$inject = ['$scope', 'ru.check.please.home.Service', 'ru.diag.pro.bna.Service', '$ionicModal', '$ionicScrollDelegate'];
 
-  function Controller() {}
+  function Controller(scope, homeService, service, ionicModal, scrollDelegate) {
+    this.homeService = homeService;
+    this.service = service;
+    this.managementPage = 1;
+    scope.closeHelper = (function(_this) {
+      return function() {
+        return _this.helperModal.hide();
+      };
+    })(this);
+    scope.closeKnowlege = (function(_this) {
+      return function() {
+        return _this.knowlegeModal.hide();
+      };
+    })(this);
+    scope.scrollUp = (function(_this) {
+      return function(delegate) {
+        return scrollDelegate.$getByHandle(delegate).scrollBy(0, -40);
+      };
+    })(this);
+    scope.scrollDown = (function(_this) {
+      return function(delegate) {
+        return scrollDelegate.$getByHandle(delegate).scrollBy(0, 40);
+      };
+    })(this);
+    ionicModal.fromTemplateUrl('templates/bna-helper-template.html', {
+      scope: scope
+    }).then((function(_this) {
+      return function(ctrlr) {
+        return _this.helperModal = ctrlr;
+      };
+    })(this));
+    scope.$on('$destroy', (function(_this) {
+      return function() {
+        var ref, ref1;
+        if ((ref = _this.helperModal) != null) {
+          ref.remove();
+        }
+        return (ref1 = _this.knowlegeModal) != null ? ref1.remove() : void 0;
+      };
+    })(this));
+    ionicModal.fromTemplateUrl('templates/bna-helper-knowlege-template.html', {
+      scope: scope
+    }).then((function(_this) {
+      return function(ctrlr) {
+        return _this.knowlegeModal = ctrlr;
+      };
+    })(this));
+  }
+
+  Controller.prototype.scan = function() {
+    return this.homeService.showWaitingModal(this.service.deviceName()).then((function(_this) {
+      return function() {
+        return _this.service.scan()["finally"](function() {
+          return _this.homeService.hideWaitingModal();
+        });
+      };
+    })(this));
+  };
+
+  Controller.prototype.openHelper = function() {
+    return this.helperModal.show();
+  };
+
+  Controller.prototype.openKnowlege = function() {
+    return this.knowlegeModal.show();
+  };
 
   return Controller;
 
@@ -833,14 +1023,16 @@ namespace('ru.diag.pro.pinpad');
 
 angular.module(['ru.diag.pro.pinpad', '1.0.0'], ['ionic', 'sys.menu', 'sys.bundle']).constant('ru.diag.pro.pinpad.stateName', 'menu.pinpad').service('ru.diag.pro.pinpad.Service', ru.diag.pro.pinpad.Service).config([
   '$stateProvider', '$urlRouterProvider', 'ru.diag.pro.pinpad.stateName', function($stateProvider, $urlRouterProvider, stateName) {
-    return $stateProvider.state(stateName, {
+    var deviceState;
+    deviceState = {
+      name: 'EPP'
+    };
+    $stateProvider.state(stateName, {
       url: '/pinpad',
       showInSideMenu: true,
-      title: 'Пинпад',
+      title: 'EPP',
       order: 50,
-      deviceState: {
-        name: 'Пинпад'
-      },
+      deviceState: deviceState,
       views: {
         'menuContent': {
           templateUrl: function($stateParams) {
@@ -857,6 +1049,20 @@ angular.module(['ru.diag.pro.pinpad', '1.0.0'], ['ionic', 'sys.menu', 'sys.bundl
             };
           }
         ]
+      }
+    });
+    return $stateProvider.state(stateName + "-management", {
+      url: '/pinpad-management',
+      showInSideMenu: false,
+      title: 'Управление пинпадом',
+      deviceStateLink: deviceState,
+      views: {
+        'menuContent': {
+          templateUrl: function($stateParams) {
+            return 'templates/pinpad-management-template.html';
+          },
+          controller: 'ru.diag.pro.pinpad.Controller as controller'
+        }
       }
     });
   }
@@ -993,14 +1199,16 @@ namespace('ru.diag.pro.bna');
 
 angular.module(['ru.diag.pro.bna', '1.0.0'], ['ionic', 'sys.menu', 'sys.bundle']).constant('ru.diag.pro.bna.stateName', 'menu.bna').service('ru.diag.pro.bna.Service', ru.diag.pro.bna.Service).config([
   '$stateProvider', '$urlRouterProvider', 'ru.diag.pro.bna.stateName', function($stateProvider, $urlRouterProvider, stateName) {
-    return $stateProvider.state(stateName, {
+    var deviceState;
+    deviceState = {
+      name: 'BNA'
+    };
+    $stateProvider.state(stateName, {
       url: '/bna',
       showInSideMenu: true,
       title: 'BNA',
       order: 60,
-      deviceState: {
-        name: 'BNA'
-      },
+      deviceState: deviceState,
       views: {
         'menuContent': {
           templateUrl: function($stateParams) {
@@ -1017,6 +1225,20 @@ angular.module(['ru.diag.pro.bna', '1.0.0'], ['ionic', 'sys.menu', 'sys.bundle']
             };
           }
         ]
+      }
+    });
+    return $stateProvider.state(stateName + "-management", {
+      url: '/bna-management',
+      showInSideMenu: false,
+      title: 'Управление диспенсером',
+      deviceStateLink: deviceState,
+      views: {
+        'menuContent': {
+          templateUrl: function($stateParams) {
+            return 'templates/bna-management-template.html';
+          },
+          controller: 'ru.diag.pro.bna.Controller as controller'
+        }
       }
     });
   }
