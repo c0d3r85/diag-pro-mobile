@@ -1,5 +1,5 @@
 <style type="text/css">
-	.dispenser-img {
+	.pinpad-img {
 		top: 20px;
 		right: 10px;
 		width: 256px;
@@ -13,7 +13,7 @@
 		/*float:right;*/
 		/*background-image: url(img/start-bg.jpg);*/
 	}
-	.left-dispenser-text {
+	.left-pinpad-text {
 		/*right: 520px;
 		left: 0px;*/
 		width: 250px;
@@ -26,7 +26,7 @@
 		position: absolute;
 		/*display: inline-block;*/
 	}
-	.bottom-dispenser-text {
+	.bottom-pinpad-text {
 		/*bottom: 10px;*/
 		top: 332px;
 		left: 250px;
@@ -37,16 +37,16 @@
 	}
 </style>
 
-<ion-view view-title="Диспенсер">
+<ion-view view-title="Остальные датчики">
 <ion-nav-buttons side="left">
     </ion-nav-buttons>
-	<ion-content class="has-header  has-footer">
+	<ion-content class="has-header has-footer">
 	<div class="list card">
-
-		<div class="item item-divider" ng-if="controller.hasErrors()">Состояние</div>
-	    <div class="item" ng-if="controller.hasErrors()">M-Status: 16 (ошибка скорости главного мотора диспенсера)</div>
-	    <div class="item item-body" href="#" style="margin: 0 auto; width: 300px;">
-	    	<img src="img/dispenser.jpg">
+		<div class="item item-divider">Состояние</div>
+	    <div class="item">Интерлок Диспенсер ON:1</div>
+	    <div class="item">Интерлок BNA OFF:2</div>
+	    <div class="item item-body" href="#" style="margin: 0 auto; width: 540px;">
+	    	<img src="img/misc1.jpg">
 	      
 	    </div>
 	</div>
@@ -56,11 +56,11 @@
 	<div class="bar bar-footer bar-clear">		
 		<div class="button-bar">
 		<button class="button button-balanced" ng-click="controller.scan()">
-			1 Опросить
+			1 Проверка индикаторов
 		</button>
-		<button class="button button-balanced" ui-sref="menu.dispenser-management">
+		<!-- <button class="button button-balanced" ui-sref="menu.pinpad-management">
 			2 Управление
-		</button>
+		</button> -->
 		<button class="button button-balanced" ng-click="controller.openKnowlege()">
 			3 База знаний
 		</button>

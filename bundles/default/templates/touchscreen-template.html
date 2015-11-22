@@ -1,4 +1,30 @@
 <ion-view view-title="Тачскрин">
-	<ion-content>
+<ion-nav-buttons side="left">
+    </ion-nav-buttons>
+	<ion-content class="has-header has-footer">
+	<div class="list card">
+	    <div class="item item-body" href="#" style="margin: 0 auto; width: 710px;">
+	    	<img src="img/touchscreen.jpg">
+	      
+	    </div>
+	</div>
+
 	</ion-content>
+
+	<div class="bar bar-footer bar-clear">		
+		<div class="button-bar">
+		<button class="button button-balanced" ng-click="controller.testing()">
+			1 Тестирование
+		</button>
+		<!-- <button class="button button-balanced" ui-sref="menu.pinpad-management">
+			2 Управление
+		</button> -->
+		<button class="button button-balanced" ng-click="controller.openKnowlege()">
+			3 База знаний
+		</button>
+		<button class="button button-balanced" ng-click="controller.openHelper()">
+			4 Помощник
+		</button>
+		</div>
+	</div>
 </ion-view>

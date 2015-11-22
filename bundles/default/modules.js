@@ -296,9 +296,29 @@ ru.diag.pro.pinpad.Service = (function() {
 namespace('ru.diag.pro.touchscreen');
 
 ru.diag.pro.touchscreen.Service = (function() {
-  Service.$inject = [];
+  Service.$inject = ['$state', '$timeout', 'ru.diag.pro.touchscreen.stateName'];
 
-  function Service() {}
+  function Service(state, timeout, stateName1) {
+    this.timeout = timeout;
+    this.stateName = stateName1;
+    this.deviceState = state.get(this.stateName).deviceState;
+  }
+
+  Service.prototype.deviceName = function() {
+    return this.deviceState.name;
+  };
+
+  Service.prototype.scan = function() {
+    return this._udateErrorCodes(this.stateName, []);
+  };
+
+  Service.prototype._udateErrorCodes = function(stateName, codes) {
+    return this.timeout(100).then((function(_this) {
+      return function() {
+        return _this.deviceState.errorCodes = codes;
+      };
+    })(this));
+  };
 
   return Service;
 
@@ -339,6 +359,68 @@ namespace('ru.diag.pro.bna');
 
 ru.diag.pro.bna.Service = (function() {
   Service.$inject = ['$state', '$timeout', 'ru.diag.pro.bna.stateName'];
+
+  function Service(state, timeout, stateName1) {
+    this.timeout = timeout;
+    this.stateName = stateName1;
+    this.deviceState = state.get(this.stateName).deviceState;
+  }
+
+  Service.prototype.deviceName = function() {
+    return this.deviceState.name;
+  };
+
+  Service.prototype.scan = function() {
+    return this._udateErrorCodes(this.stateName, []);
+  };
+
+  Service.prototype._udateErrorCodes = function(stateName, codes) {
+    return this.timeout(100).then((function(_this) {
+      return function() {
+        return _this.deviceState.errorCodes = codes;
+      };
+    })(this));
+  };
+
+  return Service;
+
+})();
+
+namespace('ru.diag.pro.system');
+
+ru.diag.pro.system.Service = (function() {
+  Service.$inject = ['$state', '$timeout', 'ru.diag.pro.system.stateName'];
+
+  function Service(state, timeout, stateName1) {
+    this.timeout = timeout;
+    this.stateName = stateName1;
+    this.deviceState = state.get(this.stateName).deviceState;
+  }
+
+  Service.prototype.deviceName = function() {
+    return this.deviceState.name;
+  };
+
+  Service.prototype.scan = function() {
+    return this._udateErrorCodes(this.stateName, []);
+  };
+
+  Service.prototype._udateErrorCodes = function(stateName, codes) {
+    return this.timeout(100).then((function(_this) {
+      return function() {
+        return _this.deviceState.errorCodes = codes;
+      };
+    })(this));
+  };
+
+  return Service;
+
+})();
+
+namespace('ru.diag.pro.misc');
+
+ru.diag.pro.misc.Service = (function() {
+  Service.$inject = ['$state', '$timeout', 'ru.diag.pro.misc.stateName'];
 
   function Service(state, timeout, stateName1) {
     this.timeout = timeout;
@@ -760,9 +842,74 @@ ru.diag.pro.pinpad.Controller = (function() {
 namespace('ru.diag.pro.touchscreen');
 
 ru.diag.pro.touchscreen.Controller = (function() {
-  Controller.$inject = [];
+  Controller.$inject = ['$scope', 'ru.check.please.home.Service', 'ru.diag.pro.touchscreen.Service', '$ionicModal', '$ionicScrollDelegate'];
 
-  function Controller() {}
+  function Controller(scope, homeService, service, ionicModal, scrollDelegate) {
+    this.homeService = homeService;
+    this.service = service;
+    this.managementPage = 1;
+    scope.closeHelper = (function(_this) {
+      return function() {
+        return _this.helperModal.hide();
+      };
+    })(this);
+    scope.closeKnowlege = (function(_this) {
+      return function() {
+        return _this.knowlegeModal.hide();
+      };
+    })(this);
+    scope.scrollUp = (function(_this) {
+      return function(delegate) {
+        return scrollDelegate.$getByHandle(delegate).scrollBy(0, -40);
+      };
+    })(this);
+    scope.scrollDown = (function(_this) {
+      return function(delegate) {
+        return scrollDelegate.$getByHandle(delegate).scrollBy(0, 40);
+      };
+    })(this);
+    ionicModal.fromTemplateUrl('templates/touchscreen-helper-template.html', {
+      scope: scope
+    }).then((function(_this) {
+      return function(ctrlr) {
+        return _this.helperModal = ctrlr;
+      };
+    })(this));
+    scope.$on('$destroy', (function(_this) {
+      return function() {
+        var ref, ref1;
+        if ((ref = _this.helperModal) != null) {
+          ref.remove();
+        }
+        return (ref1 = _this.knowlegeModal) != null ? ref1.remove() : void 0;
+      };
+    })(this));
+    ionicModal.fromTemplateUrl('templates/touchscreen-helper-knowlege-template.html', {
+      scope: scope
+    }).then((function(_this) {
+      return function(ctrlr) {
+        return _this.knowlegeModal = ctrlr;
+      };
+    })(this));
+  }
+
+  Controller.prototype.scan = function() {
+    return this.homeService.showWaitingModal(this.service.deviceName()).then((function(_this) {
+      return function() {
+        return _this.service.scan()["finally"](function() {
+          return _this.homeService.hideWaitingModal();
+        });
+      };
+    })(this));
+  };
+
+  Controller.prototype.openHelper = function() {
+    return this.helperModal.show();
+  };
+
+  Controller.prototype.openKnowlege = function() {
+    return this.knowlegeModal.show();
+  };
 
   return Controller;
 
@@ -776,6 +923,7 @@ ru.diag.pro.dispenser.Controller = (function() {
   function Controller(scope, homeService, service, ionicModal, scrollDelegate) {
     this.homeService = homeService;
     this.service = service;
+    this.scope = scope;
     this.managementPage = 1;
     scope.closeHelper = (function(_this) {
       return function() {
@@ -840,6 +988,11 @@ ru.diag.pro.dispenser.Controller = (function() {
     return this.knowlegeModal.show();
   };
 
+  Controller.prototype.hasErrors = function() {
+    var ref, ref1, ref2;
+    return ((ref = this.service) != null ? (ref1 = ref.deviceState) != null ? (ref2 = ref1.errorCodes) != null ? ref2.length : void 0 : void 0 : void 0) > 0;
+  };
+
   return Controller;
 
 })();
@@ -890,6 +1043,158 @@ ru.diag.pro.bna.Controller = (function() {
       };
     })(this));
     ionicModal.fromTemplateUrl('templates/bna-helper-knowlege-template.html', {
+      scope: scope
+    }).then((function(_this) {
+      return function(ctrlr) {
+        return _this.knowlegeModal = ctrlr;
+      };
+    })(this));
+  }
+
+  Controller.prototype.scan = function() {
+    return this.homeService.showWaitingModal(this.service.deviceName()).then((function(_this) {
+      return function() {
+        return _this.service.scan()["finally"](function() {
+          return _this.homeService.hideWaitingModal();
+        });
+      };
+    })(this));
+  };
+
+  Controller.prototype.openHelper = function() {
+    return this.helperModal.show();
+  };
+
+  Controller.prototype.openKnowlege = function() {
+    return this.knowlegeModal.show();
+  };
+
+  return Controller;
+
+})();
+
+namespace('ru.diag.pro.system');
+
+ru.diag.pro.system.Controller = (function() {
+  Controller.$inject = ['$scope', 'ru.check.please.home.Service', 'ru.diag.pro.system.Service', '$ionicModal', '$ionicScrollDelegate'];
+
+  function Controller(scope, homeService, service, ionicModal, scrollDelegate) {
+    this.homeService = homeService;
+    this.service = service;
+    this.managementPage = 1;
+    scope.closeHelper = (function(_this) {
+      return function() {
+        return _this.helperModal.hide();
+      };
+    })(this);
+    scope.closeKnowlege = (function(_this) {
+      return function() {
+        return _this.knowlegeModal.hide();
+      };
+    })(this);
+    scope.scrollUp = (function(_this) {
+      return function(delegate) {
+        return scrollDelegate.$getByHandle(delegate).scrollBy(0, -40);
+      };
+    })(this);
+    scope.scrollDown = (function(_this) {
+      return function(delegate) {
+        return scrollDelegate.$getByHandle(delegate).scrollBy(0, 40);
+      };
+    })(this);
+    ionicModal.fromTemplateUrl('templates/system-helper-template.html', {
+      scope: scope
+    }).then((function(_this) {
+      return function(ctrlr) {
+        return _this.helperModal = ctrlr;
+      };
+    })(this));
+    scope.$on('$destroy', (function(_this) {
+      return function() {
+        var ref, ref1;
+        if ((ref = _this.helperModal) != null) {
+          ref.remove();
+        }
+        return (ref1 = _this.knowlegeModal) != null ? ref1.remove() : void 0;
+      };
+    })(this));
+    ionicModal.fromTemplateUrl('templates/system-helper-knowlege-template.html', {
+      scope: scope
+    }).then((function(_this) {
+      return function(ctrlr) {
+        return _this.knowlegeModal = ctrlr;
+      };
+    })(this));
+  }
+
+  Controller.prototype.scan = function() {
+    return this.homeService.showWaitingModal(this.service.deviceName()).then((function(_this) {
+      return function() {
+        return _this.service.scan()["finally"](function() {
+          return _this.homeService.hideWaitingModal();
+        });
+      };
+    })(this));
+  };
+
+  Controller.prototype.openHelper = function() {
+    return this.helperModal.show();
+  };
+
+  Controller.prototype.openKnowlege = function() {
+    return this.knowlegeModal.show();
+  };
+
+  return Controller;
+
+})();
+
+namespace('ru.diag.pro.misc');
+
+ru.diag.pro.misc.Controller = (function() {
+  Controller.$inject = ['$scope', 'ru.check.please.home.Service', 'ru.diag.pro.misc.Service', '$ionicModal', '$ionicScrollDelegate'];
+
+  function Controller(scope, homeService, service, ionicModal, scrollDelegate) {
+    this.homeService = homeService;
+    this.service = service;
+    this.managementPage = 1;
+    scope.closeHelper = (function(_this) {
+      return function() {
+        return _this.helperModal.hide();
+      };
+    })(this);
+    scope.closeKnowlege = (function(_this) {
+      return function() {
+        return _this.knowlegeModal.hide();
+      };
+    })(this);
+    scope.scrollUp = (function(_this) {
+      return function(delegate) {
+        return scrollDelegate.$getByHandle(delegate).scrollBy(0, -40);
+      };
+    })(this);
+    scope.scrollDown = (function(_this) {
+      return function(delegate) {
+        return scrollDelegate.$getByHandle(delegate).scrollBy(0, 40);
+      };
+    })(this);
+    ionicModal.fromTemplateUrl('templates/misc-helper-template.html', {
+      scope: scope
+    }).then((function(_this) {
+      return function(ctrlr) {
+        return _this.helperModal = ctrlr;
+      };
+    })(this));
+    scope.$on('$destroy', (function(_this) {
+      return function() {
+        var ref, ref1;
+        if ((ref = _this.helperModal) != null) {
+          ref.remove();
+        }
+        return (ref1 = _this.knowlegeModal) != null ? ref1.remove() : void 0;
+      };
+    })(this));
+    ionicModal.fromTemplateUrl('templates/misc-helper-knowlege-template.html', {
       scope: scope
     }).then((function(_this) {
       return function(ctrlr) {
@@ -1072,14 +1377,16 @@ namespace('ru.diag.pro.touchscreen');
 
 angular.module(['ru.diag.pro.touchscreen', '1.0.0'], ['ionic', 'sys.menu', 'sys.bundle']).constant('ru.diag.pro.touchscreen.stateName', 'menu.touchscreen').service('ru.diag.pro.touchscreen.Service', ru.diag.pro.touchscreen.Service).config([
   '$stateProvider', '$urlRouterProvider', 'ru.diag.pro.touchscreen.stateName', function($stateProvider, $urlRouterProvider, stateName) {
+    var deviceState;
+    deviceState = {
+      name: 'Тачскрин'
+    };
     return $stateProvider.state(stateName, {
       url: '/touchscreen',
       showInSideMenu: true,
       order: 70,
       title: 'Тачскрин',
-      deviceState: {
-        name: 'Тачскрин'
-      },
+      deviceState: deviceState,
       views: {
         'menuContent': {
           templateUrl: function($stateParams) {
@@ -1243,3 +1550,101 @@ angular.module(['ru.diag.pro.bna', '1.0.0'], ['ionic', 'sys.menu', 'sys.bundle']
     });
   }
 ]).controller('ru.diag.pro.bna.Controller', ru.diag.pro.bna.Controller);
+
+namespace('ru.diag.pro.system');
+
+angular.module(['ru.diag.pro.system', '1.0.0'], ['ionic', 'sys.menu', 'sys.bundle']).constant('ru.diag.pro.system.stateName', 'menu.system').service('ru.diag.pro.system.Service', ru.diag.pro.system.Service).config([
+  '$stateProvider', '$urlRouterProvider', 'ru.diag.pro.system.stateName', function($stateProvider, $urlRouterProvider, stateName) {
+    var deviceState;
+    deviceState = {
+      name: 'Система'
+    };
+    $stateProvider.state(stateName, {
+      url: '/system',
+      showInSideMenu: true,
+      title: 'Система',
+      order: 80,
+      deviceState: deviceState,
+      views: {
+        'menuContent': {
+          templateUrl: function($stateParams) {
+            return 'templates/system-template.html';
+          },
+          controller: 'ru.diag.pro.system.Controller as controller'
+        }
+      },
+      resolve: {
+        orderParams: [
+          'ru.diag.pro.system.Service', function(service) {
+            return {
+              mainService: service
+            };
+          }
+        ]
+      }
+    });
+    return $stateProvider.state(stateName + "-management", {
+      url: '/system-management',
+      showInSideMenu: false,
+      title: 'Управление',
+      deviceStateLink: deviceState,
+      views: {
+        'menuContent': {
+          templateUrl: function($stateParams) {
+            return 'templates/system-management-template.html';
+          },
+          controller: 'ru.diag.pro.system.Controller as controller'
+        }
+      }
+    });
+  }
+]).controller('ru.diag.pro.system.Controller', ru.diag.pro.system.Controller);
+
+namespace('ru.diag.pro.misc');
+
+angular.module(['ru.diag.pro.misc', '1.0.0'], ['ionic', 'sys.menu', 'sys.bundle']).constant('ru.diag.pro.misc.stateName', 'menu.misc').service('ru.diag.pro.misc.Service', ru.diag.pro.misc.Service).config([
+  '$stateProvider', '$urlRouterProvider', 'ru.diag.pro.misc.stateName', function($stateProvider, $urlRouterProvider, stateName) {
+    var deviceState;
+    deviceState = {
+      name: 'Misc'
+    };
+    $stateProvider.state(stateName, {
+      url: '/misc',
+      showInSideMenu: true,
+      title: 'Остальные датчики',
+      order: 90,
+      deviceState: deviceState,
+      views: {
+        'menuContent': {
+          templateUrl: function($stateParams) {
+            return 'templates/misc-template.html';
+          },
+          controller: 'ru.diag.pro.misc.Controller as controller'
+        }
+      },
+      resolve: {
+        orderParams: [
+          'ru.diag.pro.misc.Service', function(service) {
+            return {
+              mainService: service
+            };
+          }
+        ]
+      }
+    });
+    return $stateProvider.state(stateName + "-management", {
+      url: '/misc-management',
+      showInSideMenu: false,
+      title: 'Управление пинпадом',
+      deviceStateLink: deviceState,
+      views: {
+        'menuContent': {
+          templateUrl: function($stateParams) {
+            return 'templates/misc-management-template.html';
+          },
+          controller: 'ru.diag.pro.misc.Controller as controller'
+        }
+      }
+    });
+  }
+]).controller('ru.diag.pro.misc.Controller', ru.diag.pro.misc.Controller);
