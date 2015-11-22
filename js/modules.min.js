@@ -181,10 +181,14 @@ ru.check.please.home.Service = (function() {
     this.scope = rootScope.$new(true);
     this.scope.device = ' ';
     this.scope.imageForDev = function(dev) {
-      if (dev === 'Диспенсер' || dev === 'Кардридер' || dev === 'Принтер' || dev === 'BNA') {
-        return "img/scan-" + dev + ".jpg";
-      }
-      return "img/scan-.jpg";
+      var ee;
+      ee = {
+        'Диспенсер': "img/scan-dispenser.jpg",
+        'BNA': "img/scan-bna.jpg",
+        'Принтер': "img/scan-printer.jpg",
+        'Кардридер': "img/scan-cardreader.jpg"
+      };
+      return ee[dev] || "img/scan-.jpg";
     };
     template = '<ion-modal-view style="background-color: white; left: 0; top: 0; height: 100%; width: 100%">\n<div style="margin: auto; position: absolute; top: 0; left: 0; bottom: 0; right: 0; text-align: center; width: 261px; height: 412px;">\n  <ion-spinner></ion-spinner>\n  <img ng-show="fullScan" style="width: 261px; height: 412px;" ng-src="{{imageForDev(device)}}">\n  <div ng-show="device">{{device}}</div>\n</div>\n</ion-modal-view>';
     this.waitingModal = ionicModal.fromTemplate(template, {

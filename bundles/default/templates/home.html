@@ -24,7 +24,7 @@
 <ion-view view-title="Информация о {{controller.bankomatModel}}">
 	<ion-content class="has-footer"
   ng-class="{ 'home-img': !controller.scanned, '':controller.scanned }">
-		<ion-list>
+		<div class="list">
       <div ng-show="controller.scanned">
         <div class="list" ng-if="controller.statesWithCriticalErrors().length > 0">
           <div class="item item-divider item-icon-left">
@@ -62,14 +62,15 @@
           </div>
         </div>
       </div>
-    </ion-list>
+    </div>
 	</ion-content>
-  <div class="bar bar-footer bar-clear">
-        <!-- <div class="title">Помощник решения проблем</div> -->
-        <!-- <div class="button-bar"> -->
+  <div class="bar bar-footer bar-balanced">
+        <div class="title" ng-click="controller.scanDevices()">1 Запустить полную диагностику</div>
+        <!-- <div class="button-bar">
         <button class="button button-block button-balanced" ng-click="controller.scanDevices()">
           1 Запустить полную диагностику
         </button>
-        <!-- </div> -->
+
+        </div> -->
       </div>
 </ion-view>
